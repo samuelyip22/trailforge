@@ -9,15 +9,18 @@ import { MapPin, Clock, TrendingUp, ArrowLeft, Navigation, Info, Star } from 'lu
 import { getTrailById, difficultyConfig } from '@/lib/trails'
 
 // generateMetadata sets the browser tab title for each trail page
+// In Next.js 15+, params is a Promise — we must await it before using it
 export async function generateMetadata({ params }) {
-  const trail = getTrailById(params.areaId, params.trailId)
+  const { areaId, trailId } = await params
+  const trail = getTrailById(areaId, trailId)
   if (!trail) return { title: 'Trail not found' }
   return { title: `${trail.name} — TrailForge` }
 }
 
-export default function TrailDetailPage({ params }) {
-  // Look up the trail from our data using the URL params
-  const trail = getTrailById(params.areaId, params.trailId)
+export default async function TrailDetailPage({ params }) {
+  // await params first — required in Next.js 15+ (params is now a Promise)
+  const { areaId, trailId } = await params
+  const trail = getTrailById(areaId, trailId)
 
   // If the trail doesn't exist, show Next.js built-in 404 page
   if (!trail) notFound()
