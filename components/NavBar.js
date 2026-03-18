@@ -6,11 +6,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Mountain, Map, BookOpen, CalendarDays, Wrench, User } from 'lucide-react'
+import { Mountain, Map, BookOpen, CalendarDays, Wrench, User, GraduationCap } from 'lucide-react'
 
 // Each nav item: label, URL path, and icon component
 const navItems = [
   { label: 'Trails',  href: '/trails',  icon: Map },
+  { label: 'Guide',   href: '/guide',   icon: GraduationCap },
   { label: 'My Log',  href: '/log',     icon: BookOpen },
   { label: 'Agenda',  href: '/agenda',  icon: CalendarDays },
   { label: 'My Bike', href: '/bike',    icon: Wrench },
