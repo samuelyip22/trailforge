@@ -14,7 +14,7 @@ import WeatherWidget from '@/components/WeatherWidget'
 import TrailActions from '@/components/TrailActions'
 // DynamicTrailMap is a client component wrapper that loads Leaflet with ssr:false.
 // We can't use next/dynamic({ ssr:false }) directly in a server component.
-import DynamicTrailMap from '@/components/DynamicTrailMap'
+import DynamicAreaTrailMap from '@/components/DynamicAreaTrailMap'
 
 // generateMetadata sets the browser tab title for each trail page
 // In Next.js 15+, params is a Promise — we must await it before using it
@@ -101,12 +101,16 @@ export default async function TrailDetailPage({ params }) {
       {/* TrailMap is loaded dynamically (client-only) — shows parking + trailhead markers */}
       <div className="bg-white rounded-2xl border border-stone-200 p-4 mb-4">
         <h2 className="font-semibold text-stone-800 mb-3">🗺️ Trail Map</h2>
-        <DynamicTrailMap
+        {/* Shows all trails in this area as gray lines, selected trail highlighted */}
+        <DynamicAreaTrailMap
+          allTrails={trail.siblingTrails}
+          selectedTrailId={trail.id}
           parkingLat={trail.parkingLat}
           parkingLng={trail.parkingLng}
           trailheadLat={trail.trailheadLat}
           trailheadLng={trail.trailheadLng}
           trailName={trail.name}
+          difficulty={trail.difficulty}
         />
         <p className="text-xs text-stone-400 mt-2">
           🅿️ Blue = Parking &nbsp;·&nbsp; 🟠 Orange = Trailhead &nbsp;·&nbsp; Tap markers for Google Maps directions

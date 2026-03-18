@@ -6,9 +6,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { MapPin, Clock, TrendingUp, ArrowRight, LocateFixed, X } from 'lucide-react'
+import { MapPin, Clock, TrendingUp, ArrowRight, LocateFixed, X, Map } from 'lucide-react'
 import { trailAreas, difficultyConfig } from '@/lib/trails'
 import { getDistanceMiles } from '@/lib/distance'
+import DynamicOverviewMap from '@/components/DynamicOverviewMap'
 
 // All unique regions from our trail data (no duplicates)
 const allRegions = [...new Set(trailAreas.map(a => a.region))]
@@ -74,6 +75,16 @@ export default function TrailsPage() {
         <p className="text-stone-500 text-sm mt-1">
           Utah mountain bike trails — organized by area. Tap a trail for maps, weather, and directions.
         </p>
+      </div>
+
+      {/* ── UTAH OVERVIEW MAP ────────────────────────────────── */}
+      <div className="bg-white rounded-2xl border border-stone-200 p-4 mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Map size={16} className="text-orange-500" />
+          <h2 className="font-semibold text-stone-800 text-sm">All Utah Trail Areas</h2>
+          <span className="text-xs text-stone-400 ml-1">— tap a pin to see details</span>
+        </div>
+        <DynamicOverviewMap areas={trailAreas} />
       </div>
 
       {/* ── FILTER BAR ───────────────────────────────────────── */}
