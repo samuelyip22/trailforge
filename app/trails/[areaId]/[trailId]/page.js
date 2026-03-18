@@ -8,15 +8,13 @@
 
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import { MapPin, Clock, TrendingUp, ArrowLeft, Navigation, Info } from 'lucide-react'
 import { getTrailById, difficultyConfig } from '@/lib/trails'
 import WeatherWidget from '@/components/WeatherWidget'
 import TrailActions from '@/components/TrailActions'
-
-// Dynamic import for TrailMap — Leaflet requires the browser (no server-side rendering).
-// { ssr: false } tells Next.js: "don't try to render this on the server"
-const TrailMap = dynamic(() => import('@/components/TrailMap'), { ssr: false })
+// DynamicTrailMap is a client component wrapper that loads Leaflet with ssr:false.
+// We can't use next/dynamic({ ssr:false }) directly in a server component.
+import DynamicTrailMap from '@/components/DynamicTrailMap'
 
 // generateMetadata sets the browser tab title for each trail page
 // In Next.js 15+, params is a Promise — we must await it before using it
@@ -103,7 +101,7 @@ export default async function TrailDetailPage({ params }) {
       {/* TrailMap is loaded dynamically (client-only) — shows parking + trailhead markers */}
       <div className="bg-white rounded-2xl border border-stone-200 p-4 mb-4">
         <h2 className="font-semibold text-stone-800 mb-3">🗺️ Trail Map</h2>
-        <TrailMap
+        <DynamicTrailMap
           parkingLat={trail.parkingLat}
           parkingLng={trail.parkingLng}
           trailheadLat={trail.trailheadLat}
