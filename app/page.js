@@ -3,7 +3,7 @@
 // Shows a welcome message, quick stats, and trail suggestions.
 
 import Link from 'next/link'
-import { Map, BookOpen, CalendarDays, Wrench, ArrowRight, Mountain } from 'lucide-react'
+import { Map, BookOpen, CalendarDays, Wrench, ArrowRight, Mountain, GraduationCap } from 'lucide-react'
 
 export default function HomePage() {
   return (
@@ -44,12 +44,13 @@ export default function HomePage() {
 
       {/* Quick nav cards */}
       <h2 className="text-lg font-semibold text-stone-700 mb-4">Where do you want to go?</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: 'Trail Explorer',     desc: 'Find Utah trails',       href: '/trails',  icon: Map,          color: 'bg-green-50 border-green-200 text-green-700' },
-          { label: 'My Ride Log',        desc: 'Track your rides',       href: '/log',     icon: BookOpen,     color: 'bg-blue-50 border-blue-200 text-blue-700' },
-          { label: 'Agenda',             desc: 'Plan your rides',        href: '/agenda',  icon: CalendarDays, color: 'bg-purple-50 border-purple-200 text-purple-700' },
-          { label: 'My Bike',            desc: 'Garage & maintenance',   href: '/bike',    icon: Wrench,       color: 'bg-orange-50 border-orange-200 text-orange-700' },
+          { label: 'Trail Explorer',     desc: 'Find Utah trails',       href: '/trails',  icon: Map,            color: 'bg-green-50 border-green-200 text-green-700' },
+          { label: 'Skills Guide',       desc: 'Ride better',            href: '/guide',   icon: GraduationCap, color: 'bg-amber-50 border-amber-200 text-amber-700' },
+          { label: 'My Ride Log',        desc: 'Track your rides',       href: '/log',     icon: BookOpen,       color: 'bg-blue-50 border-blue-200 text-blue-700' },
+          { label: 'Agenda',             desc: 'Plan your rides',        href: '/agenda',  icon: CalendarDays,   color: 'bg-purple-50 border-purple-200 text-purple-700' },
+          { label: 'My Bike',            desc: 'Garage & maintenance',   href: '/bike',    icon: Wrench,         color: 'bg-orange-50 border-orange-200 text-orange-700' },
         ].map(({ label, desc, href, icon: Icon, color }) => (
           <Link
             key={href}
@@ -63,6 +64,28 @@ export default function HomePage() {
             </div>
           </Link>
         ))}
+      </div>
+
+      {/* MTB Skills Guide teaser */}
+      <div className="mt-8 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-5 flex items-center justify-between gap-4">
+        <div className="flex items-start gap-4">
+          <div className="bg-amber-100 rounded-xl p-3 shrink-0">
+            <GraduationCap size={22} className="text-amber-600" />
+          </div>
+          <div>
+            <div className="font-semibold text-stone-900 mb-1">New to MTB or want to ride faster?</div>
+            <p className="text-sm text-stone-500">
+              The Skills Guide covers 6 core techniques — braking, cornering, descending and more —
+              with specific Utah trails to practice each one on.
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/guide"
+          className="shrink-0 inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 py-2 rounded-full text-sm transition-colors"
+        >
+          Read Guide <ArrowRight size={14} />
+        </Link>
       </div>
 
       {/* Featured SLC area trails teaser */}
