@@ -40,8 +40,9 @@ export default async function TrailDetailPage({ params }) {
   const diff = difficultyConfig[trail.difficulty]
 
   // Build Google Maps links — opens directly to turn-by-turn directions
-  const parkingMapUrl    = `https://www.google.com/maps/dir/?api=1&destination=${trail.parkingLat},${trail.parkingLng}`
-  const trailheadMapUrl  = `https://www.google.com/maps/dir/?api=1&destination=${trail.trailheadLat},${trail.trailheadLng}`
+  // Use maps/search so it opens the location directly, not turn-by-turn from an unknown origin
+  const parkingMapUrl   = `https://maps.google.com/?q=${trail.parkingLat},${trail.parkingLng}`
+  const trailheadMapUrl = `https://maps.google.com/?q=${trail.trailheadLat},${trail.trailheadLng}`
 
   // Confidence label — human-readable from numeric score
   const confidenceLabel =
@@ -191,10 +192,10 @@ export default async function TrailDetailPage({ params }) {
           >
             <div className="bg-blue-100 text-blue-600 rounded-lg p-2"><Navigation size={16} /></div>
             <div className="flex-1">
-              <div className="text-sm font-medium text-stone-800 group-hover:text-blue-700">Directions to Parking</div>
+              <div className="text-sm font-medium text-stone-800 group-hover:text-blue-700">View Parking on Google Maps</div>
               <div className="text-xs text-stone-400">{trail.parkingAddress}</div>
             </div>
-            <span className="text-xs text-blue-500 font-medium">Open Maps →</span>
+            <span className="text-xs text-blue-500 font-medium">Open →</span>
           </a>
 
           {/* Trailhead link */}
@@ -206,10 +207,10 @@ export default async function TrailDetailPage({ params }) {
           >
             <div className="bg-green-100 text-green-600 rounded-lg p-2"><MapPin size={16} /></div>
             <div className="flex-1">
-              <div className="text-sm font-medium text-stone-800 group-hover:text-green-700">Directions to Trailhead</div>
+              <div className="text-sm font-medium text-stone-800 group-hover:text-green-700">View Trailhead on Google Maps</div>
               <div className="text-xs text-stone-400">{trail.trailheadAddress}</div>
             </div>
-            <span className="text-xs text-green-500 font-medium">Open Maps →</span>
+            <span className="text-xs text-green-500 font-medium">Open →</span>
           </a>
         </div>
       </div>

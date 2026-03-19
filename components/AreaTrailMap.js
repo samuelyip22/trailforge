@@ -97,11 +97,11 @@ export default function AreaTrailMap({
 
       L.default.marker([parkingLat, parkingLng], { icon: parkingIcon })
         .addTo(map)
-        .bindPopup(`<b>Parking</b><br><a href="https://www.google.com/maps/dir/?api=1&destination=${parkingLat},${parkingLng}" target="_blank" style="color:#3b82f6;font-size:12px">Open in Google Maps →</a>`)
+        .bindPopup(`<b>Parking</b><br><a href="https://maps.google.com/?q=${parkingLat},${parkingLng}" target="_blank" style="color:#3b82f6;font-size:12px">View on Google Maps →</a>`)
 
       L.default.marker([trailheadLat, trailheadLng], { icon: trailheadIcon })
         .addTo(map)
-        .bindPopup(`<b>${trailName} Trailhead</b><br><a href="https://www.google.com/maps/dir/?api=1&destination=${trailheadLat},${trailheadLng}" target="_blank" style="color:#f97316;font-size:12px">Open in Google Maps →</a>`)
+        .bindPopup(`<b>${trailName} Trailhead</b><br><a href="https://maps.google.com/?q=${trailheadLat},${trailheadLng}" target="_blank" style="color:#f97316;font-size:12px">View on Google Maps →</a>`)
 
       // Fit the map to show all trail routes in this area
       if (allCoords.length > 1) {
