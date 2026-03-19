@@ -8,11 +8,12 @@
 
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { MapPin, Clock, TrendingUp, ArrowLeft, Navigation, Info } from 'lucide-react'
+import { MapPin, Clock, TrendingUp, ArrowLeft, Navigation, Info, GraduationCap, ArrowRight } from 'lucide-react'
 import { getTrailById, difficultyConfig } from '@/lib/trails'
 import WeatherWidget from '@/components/WeatherWidget'
 import TrailActions from '@/components/TrailActions'
-// DynamicTrailMap is a client component wrapper that loads Leaflet with ssr:false.
+import SeasonalCalendar from '@/components/SeasonalCalendar'
+// DynamicAreaTrailMap is a client component wrapper that loads Leaflet with ssr:false.
 // We can't use next/dynamic({ ssr:false }) directly in a server component.
 import DynamicAreaTrailMap from '@/components/DynamicAreaTrailMap'
 
@@ -138,6 +139,37 @@ export default async function TrailDetailPage({ params }) {
         <p className="text-stone-600 text-sm leading-relaxed">{trail.howToRide}</p>
       </div>
 
+      {/* ── SKILL TIP CALLOUT ─────────────────────────────────────────── */}
+      {/* Suggests which technique from the Guide is most relevant for this difficulty */}
+      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4 flex items-start gap-3">
+        <div className="bg-amber-100 rounded-xl p-2 shrink-0">
+          <GraduationCap size={16} className="text-amber-600" />
+        </div>
+        <div className="flex-1">
+          <div className="text-sm font-semibold text-stone-800 mb-0.5">
+            {trail.difficulty === 'beginner'
+              ? 'New to MTB? Start with the basics.'
+              : trail.difficulty === 'intermediate'
+              ? 'Ready to level up your descending?'
+              : 'Pushing your limits? Technique matters most here.'}
+          </div>
+          <p className="text-xs text-stone-500">
+            {trail.difficulty === 'beginner'
+              ? 'The Skills Guide covers body position, braking, and cornering — the three things that will make this trail feel effortless.'
+              : trail.difficulty === 'intermediate'
+              ? 'Check the descending and cornering sections in the Skills Guide before you drop in.'
+              : 'Review drops, descending, and line-choice techniques in the Skills Guide before tackling this one.'}
+          </p>
+        </div>
+        <Link href="/guide" className="shrink-0 flex items-center gap-1 text-xs font-semibold text-amber-700 hover:text-amber-800">
+          Guide <ArrowRight size={11} />
+        </Link>
+      </div>
+
+      {/* ── BEST TIME TO RIDE ─────────────────────────────────────────── */}
+      {/* Shows a 12-month visual calendar of prime vs shoulder vs closed season */}
+      <SeasonalCalendar bestMonths={trail.bestMonths} surface={trail.surface} />
+
       {/* ── LIVE WEATHER ─────────────────────────────────────────────── */}
       {/* WeatherWidget fetches live data from Open-Meteo (free, no API key) */}
       <WeatherWidget
@@ -210,6 +242,44 @@ export default async function TrailDetailPage({ params }) {
           {' '}for recent community reports.
         </p>
       </div>
+
+      {/* ── YOU MIGHT ALSO LIKE ───────────────────────────────────────── */}
+      {/* Shows up to 3 other trails in the same area, excluding this one */}
+      {trail.siblingTrails.filter(t => t.id !== trail.id).length > 0 && (
+        <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-4">
+          <h2 className="font-semibold text-stone-800 mb-3">More Trails in {trail.area}</h2>
+          <div className="space-y-2">
+            {trail.siblingTrails
+              .filter(t => t.id !== trail.id)  // exclude current trail
+              .slice(0, 3)                      // show max 3
+              .map(t => {
+                const tdiff = difficultyConfig[t.difficulty]
+                return (
+                  <Link
+                    key={t.id}
+                    href={`/trails/${trail.areaId}/${t.id}`}
+                    className="flex items-center justify-between p-3 rounded-xl border border-stone-100 hover:border-orange-200 hover:bg-orange-50 transition-colors group"
+                  >
+                    <div>
+                      <div className="text-sm font-medium text-stone-800 group-hover:text-orange-700">{t.name}</div>
+                      <div className="text-xs text-stone-400 mt-0.5">
+                        {t.lengthMiles} mi · +{t.elevationGainFt.toLocaleString()} ft
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${tdiff.color}`}>{tdiff.label}</span>
+                      <ArrowRight size={13} className="text-stone-300 group-hover:text-orange-400" />
+                    </div>
+                  </Link>
+                )
+              })}
+          </div>
+          {/* Link to see all trails in this area */}
+          <Link href="/trails" className="mt-3 inline-flex items-center gap-1 text-xs text-orange-600 font-medium hover:underline">
+            View all trails <ArrowRight size={11} />
+          </Link>
+        </div>
+      )}
 
       {/* ── ACTION BUTTONS (Log Ride, Agenda, Wishlist) ──────────────── */}
       {/* TrailActions is a client component — needs browser for Supabase auth + state */}
